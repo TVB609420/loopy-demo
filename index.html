@@ -1,0 +1,548 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#8b5cf6"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Loopy"><link rel="manifest" href="./manifest.webmanifest"><link rel="icon" href="./icon.svg" type="image/svg+xml">
+<title>Loopy — Predict. Share. Save.</title>
+<style>
+:root{
+ --bg:#f5f5f7;--panel:#fff;--panel2:#f0f1f5;--text:#101114;--muted:#747780;
+ --line:#dedfe5;--blue:#0a84ff;--green:#30d158;--orange:#ff9f0a;--red:#ff453a;
+ --purple:#8b5cf6;--shadow:0 12px 35px rgba(0,0,0,.07);--r:20px
+}
+html.dark{--bg:#070709;--panel:#121214;--panel2:#1b1b1f;--text:#f5f5f7;--muted:#9a9aa3;--line:#2a2a30;--shadow:0 15px 40px rgba(0,0,0,.32)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",Inter,Segoe UI,sans-serif;letter-spacing:-.012em}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.app{min-height:100vh}
+.side{width:245px;position:fixed;inset:0 auto 0 0;padding:26px 16px;border-right:1px solid var(--line);background:color-mix(in srgb,var(--panel) 88%,transparent);backdrop-filter:blur(24px);z-index:10}
+.logo{font-size:25px;font-weight:850;letter-spacing:-.065em;padding:0 10px}.tag{font-size:11px;color:var(--muted);padding:3px 10px 28px}
+.nav{display:grid;gap:5px}.nav button{border:0;background:transparent;color:var(--muted);text-align:left;padding:12px;border-radius:13px;font-size:13px;transition:.18s}
+.nav button:hover{background:var(--panel2);color:var(--text);transform:translateX(2px)}
+.nav button.active{background:var(--text);color:var(--bg);font-weight:750}
+.adminlink{position:absolute;left:22px;bottom:126px;border:0;background:transparent;color:var(--muted);font-size:10px;padding:6px 8px;border-radius:9px;opacity:.58;transition:.18s}.adminlink:hover{opacity:1;background:var(--panel2);color:var(--text)}.sidebottom{position:absolute;left:16px;right:16px;bottom:18px}
+.theme{display:flex;gap:4px;background:var(--panel2);padding:4px;border-radius:12px}.theme button{flex:1;border:0;background:transparent;color:var(--muted);padding:7px;border-radius:9px;font-size:11px}.theme button.active{background:var(--panel);color:var(--text);box-shadow:0 2px 7px #0001;font-weight:700}
+.userpill{margin-top:10px;border:1px solid var(--line);border-radius:14px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center}.userpill small{display:block;color:var(--muted);font-size:10px}.userpill strong{font-size:12px}
+.main{margin-left:245px;padding:34px 42px 70px;max-width:1600px}
+.top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px}.eyebrow{text-transform:uppercase;letter-spacing:.12em;font-size:10px;color:var(--muted)}h1{font-size:38px;line-height:1;margin:6px 0 8px;letter-spacing:-.055em}.subtitle{font-size:14px;color:var(--muted);transition:opacity .18s}.dynamiccopy{transition:opacity .18s}.pulsecopy{animation:copyPulse .3s ease}@keyframes copyPulse{from{opacity:.25;transform:translateY(2px)}to{opacity:1;transform:none}}
+.live{display:flex;align-items:center;gap:8px;color:var(--green);font-size:12px;font-weight:750}.dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 5px #30d15822;animation:pulse 2s infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 8px #30d1580a}}
+.page{animation:pageIn .28s ease both}@keyframes pageIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.grid{display:grid;gap:15px}.stats{grid-template-columns:repeat(4,1fr);margin-bottom:15px}.two{grid-template-columns:1.35fr 1fr}.three{grid-template-columns:repeat(3,1fr)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:20px;box-shadow:var(--shadow);transition:transform .2s,box-shadow .2s,border-color .2s}.card:hover{box-shadow:0 16px 42px rgba(0,0,0,.09)}
+.statlabel{font-size:11px;color:var(--muted)}.stat{font-size:31px;font-weight:800;letter-spacing:-.05em;margin-top:8px}.trend{font-size:11px;margin-top:5px;color:var(--green)}
+.sectionhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.sectionhead h2{font-size:16px;margin:0;letter-spacing:-.025em}.sectionhead span{font-size:11px;color:var(--muted)}
+.btn{border:0;border-radius:11px;padding:9px 13px;font-size:12px;font-weight:700;transition:.16s;display:inline-flex;align-items:center;justify-content:center;gap:7px}.btn:hover{transform:translateY(-1px)}.btn:active{transform:scale(.97)}.primary{background:var(--blue);color:white}.soft{background:var(--panel2);color:var(--text)}.danger{background:#ff453a18;color:var(--red)}.success{background:#30d15818;color:#1b9f43}.outline{background:transparent;border:1px solid var(--line);color:var(--text)}
+.notice{padding:13px 15px;border-radius:14px;background:linear-gradient(100deg,#0a84ff12,#8b5cf612);border:1px solid #0a84ff22;font-size:12px;margin-bottom:15px}
+.hero{background:linear-gradient(135deg,var(--panel),color-mix(in srgb,var(--panel2) 75%,var(--panel)));position:relative;overflow:hidden}.hero:after{content:"";position:absolute;width:240px;height:240px;border-radius:50%;right:-90px;top:-100px;background:#0a84ff18;filter:blur(5px)}.hero h2{font-size:25px;margin:3px 0 8px;letter-spacing:-.04em}.hero p{color:var(--muted);font-size:13px;max-width:650px;line-height:1.55;margin:0}.heroactions{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.barrow{display:grid;grid-template-columns:95px 1fr 35px;gap:10px;align-items:center;margin:14px 0;font-size:11px}.barbg{height:9px;background:var(--panel2);border-radius:20px;overflow:hidden}.bar{height:100%;background:linear-gradient(90deg,var(--blue),var(--purple));border-radius:20px;transition:width .5s ease}.barrow b{text-align:right}
+.foodgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.food{border:1px solid var(--line);background:var(--panel);border-radius:15px;padding:14px;text-align:left;transition:.18s;position:relative;overflow:hidden}.food:hover{transform:translateY(-2px);border-color:#7c6cff88}.food.selected{border-color:#7c6cff;background:linear-gradient(135deg,#7c6cff12,#0a84ff0d);box-shadow:0 0 0 3px #7c6cff18}.emoji{font-size:22px}.food strong{display:block;font-size:13px;margin-top:9px;color:#6f5cff;font-weight:800}.food small{color:var(--muted);font-size:10px}.dark .food strong{color:#a89dff}
+.list{display:grid;gap:10px}.item{border:1px solid var(--line);border-radius:15px;padding:14px;display:flex;justify-content:space-between;gap:12px;align-items:center;transition:.18s;background:var(--panel)}.item:hover{transform:translateY(-1px);border-color:#0a84ff55}.itemmain{min-width:0}.itemtitle{font-weight:750;font-size:14px}.meta{font-size:11px;color:var(--muted);margin-top:5px;line-height:1.45}.actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.badge{font-size:10px;padding:5px 8px;border-radius:99px;background:var(--panel2);color:var(--muted);white-space:nowrap}.pricebadge{font-size:12px;padding:6px 9px;border-radius:9px;background:#30d15814;color:#178f3b;font-weight:800;white-space:nowrap}.durationselect{min-width:145px}.badge.blue{background:#0a84ff14;color:var(--blue)}.badge.green{background:#30d15816;color:#17933c}.badge.orange{background:#ff9f0a18;color:#b76a00}.badge.red{background:#ff453a16;color:var(--red)}
+.empty{text-align:center;padding:35px 15px;color:var(--muted);font-size:12px}.empty strong{display:block;color:var(--text);margin-bottom:5px}
+.modalback{position:fixed;inset:0;background:#0007;display:none;align-items:center;justify-content:center;z-index:30;padding:20px;backdrop-filter:blur(7px)}.modalback.show{display:flex;animation:fade .18s}.modal{width:min(500px,100%);max-height:min(78vh,720px);overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:0 30px 80px #0005;animation:modalIn .22s}.modal h2{margin:0 0 5px;font-size:20px}.modal p{color:var(--muted);font-size:12px}.form{display:grid;gap:10px;margin-top:16px}.input{width:100%;border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:11px;padding:11px 12px;outline:0}.input:focus{border-color:var(--blue);box-shadow:0 0 0 3px #0a84ff16}.modalfoot{display:flex;justify-content:flex-end;gap:7px;margin-top:16px}
+.toastwrap{position:fixed;right:22px;bottom:22px;z-index:50;display:grid;gap:8px}.toast{background:var(--text);color:var(--bg);padding:12px 15px;border-radius:13px;font-size:12px;box-shadow:0 12px 35px #0004;animation:toastIn .25s}.toast.out{animation:toastOut .25s forwards}@keyframes toastIn{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}@keyframes toastOut{to{opacity:0;transform:translateY(8px)}}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.step{padding:14px;border-radius:15px;background:var(--panel2);border:1px solid var(--line)}.stepnum{font-size:10px;color:var(--blue);font-weight:800}.step strong{display:block;font-size:12px;margin:6px 0 3px}.step span{font-size:10px;color:var(--muted);line-height:1.4}
+.mini{font-size:10px;color:var(--muted)}.kpi{display:flex;justify-content:space-between;align-items:end}.bigpercent{font-size:45px;font-weight:850;letter-spacing:-.06em}.ring{width:92px;height:92px;border-radius:50%;background:conic-gradient(var(--blue) 0 78%,var(--panel2) 78%);display:grid;place-items:center}.ring:after{content:"78%";width:68px;height:68px;border-radius:50%;background:var(--panel);display:grid;place-items:center;font-size:13px;font-weight:800}
+.mobilebar{display:none}
+.resetdemobtn{padding:6px 8px;font-size:9px;border-radius:9px;white-space:nowrap}
+.resetdemobtn:hover{background:var(--text);color:var(--bg)}
+@media(max-width:700px){.resetdemobtn{display:none}}
+@media(max-width:1000px){.stats,.three{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}.foodgrid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){.side{display:none}.mobilebar{display:flex;position:fixed;bottom:12px;left:12px;right:12px;background:color-mix(in srgb,var(--panel) 92%,transparent);backdrop-filter:blur(18px);border:1px solid var(--line);border-radius:17px;padding:6px;z-index:20;gap:4px}.mobilebar button{flex:1;border:0;background:transparent;color:var(--muted);padding:9px 4px;border-radius:12px;font-size:10px}.mobilebar button.active{background:var(--text);color:var(--bg)}.main{margin:0;padding:24px 15px 90px}h1{font-size:30px}.top{margin-bottom:20px}.stats,.three,.steps{grid-template-columns:1fr}.item{align-items:flex-start;flex-direction:column}.actions{justify-content:flex-start}.heroactions{display:grid}.heroactions .btn{width:100%}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+.loginback{position:fixed;inset:0;background:var(--bg);z-index:100;display:flex;align-items:center;justify-content:center;padding:22px}.loginback.hidden{display:none}.loginbox{width:min(460px,100%);background:var(--panel);border:1px solid var(--line);border-radius:26px;padding:30px;box-shadow:var(--shadow)}.loginlogo{font-size:30px;font-weight:900;letter-spacing:-.06em}.loginhint{font-size:11px;color:var(--muted);margin:7px 0 22px}.termsline{font-size:10px;color:var(--muted);line-height:1.45;margin-top:4px}.termsline a{color:var(--blue);text-decoration:none;font-weight:700}.loginerr{color:var(--red);font-size:11px;min-height:16px;margin-top:5px}.loginbox .tabrow{display:flex;gap:5px;background:var(--panel2);padding:4px;border-radius:12px;margin-bottom:17px}.loginbox .tabrow button{flex:1;border:0;background:transparent;color:var(--muted);padding:9px;border-radius:9px;font-size:11px}.loginbox .tabrow button.active{background:var(--panel);color:var(--text);font-weight:800}.admin-mode .side{background:linear-gradient(180deg,color-mix(in srgb,var(--panel) 92%,transparent),color-mix(in srgb,#261c3f 32%,var(--panel)));}.admin-mode .logo{color:var(--purple)}.admin-mode .tag{color:var(--purple)}.admin-mode .main{max-width:1650px}.logrow{font-size:11px;line-height:1.45;padding:10px 0;border-bottom:1px solid var(--line)}.logrow:last-child{border-bottom:0}.logtime{color:var(--muted);font-size:10px}.settinggrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(max-width:700px){.loginbox{padding:22px}.settinggrid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="loginback" id="loginback">
+  <div class="loginbox">
+    <div class="loginlogo">Loopy</div>
+    <div class="loginhint">Campus resource intelligence · Predict · Share · Save</div>
+    <div class="tabrow"><button id="studentTab" class="active" type="button">Student</button><button id="adminTab" type="button">Admin</button></div>
+    <form class="form" id="loginForm">
+      <input class="input" id="schoolId" name="schoolId" placeholder="School ID" autocomplete="organization" required>
+      <input class="input" id="loginPassword" name="password" type="password" placeholder="Password" autocomplete="current-password" required>
+      <input class="input" id="loginUsername" name="username" placeholder="Username" autocomplete="username" required>
+      <div class="loginerr" id="loginErr"></div>
+      <label class="termsline"><input id="termsCheck" type="checkbox"> By signing up, you agree to the <a href="#" id="termsLink">Loopy Terms &amp; Conditions</a>.</label>
+      <div class="modalfoot"><button class="btn soft" type="button" id="signupBtn">Sign up</button><button class="btn primary" type="submit">Log in</button></div>
+    </form>
+    <div class="notice" style="margin-top:16px">Demo student: <b>LOOPLY1</b> · <b>student@1</b> · <b>Kevin</b><br>Admin: <b>admin1</b> · <b>admin@1</b> · <b>admin</b></div>
+  </div>
+</div>
+<div class="app" id="appShell" style="display:none">
+<aside class="side">
+  <div class="logo">Loopy</div><div class="tag" id="sideTag">Predict · Share · Save</div>
+  <nav class="nav" id="sideNav"></nav>
+  <button class="adminlink" id="logoutBtn" type="button">⇥ Sign out</button>
+  <div class="sidebottom">
+    <div class="theme"><button data-theme="light">Light</button><button data-theme="dark">Dark</button></div>
+    <div class="userpill">
+  <div><small id="signedLabel">Signed in as</small><strong id="signedName">Kevin</strong></div>
+  <div style="display:flex;align-items:center;gap:6px">
+    <button class="btn soft resetdemobtn" id="resetDemoBtn" type="button" title="Reset demo data">↻ Reset demo</button>
+    <span>●</span>
+  </div>
+</div>
+  </div>
+</aside>
+<main class="main">
+<header class="top">
+ <div><div class="eyebrow" id="eyebrow">Campus resource intelligence</div><h1 id="title">Good morning, Kevin.</h1><div class="subtitle" id="subtitle">See what your campus needs — and what it already has.</div></div>
+ <div><div class="live"><i class="dot"></i><span id="liveLabel">Live local demo</span></div><div class="small dynamiccopy" id="liveDetail">Kevin’s campus view is updating in real time</div></div>
+</header>
+<div id="appview"></div>
+</main>
+</div>
+<div class="mobilebar" id="mobilebar"></div>
+<div class="modalback" id="modalback"><div class="modal" id="modal"></div></div>
+<div class="toastwrap" id="toasts"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* Loopy LIVE CONFIG — replace these placeholders before hosting. */
+const SUPABASE_URL="https://abcdefghijk.supabase.co";
+const SUPABASE_KEY="sb_publishable_EXCvHrpUjevJeAUMY8_7Fg_22wOL1MO";
+const LIVE_ENABLED=
+  SUPABASE_URL.startsWith("https://") &&
+  !SUPABASE_URL.includes("YOUR_") &&
+  !SUPABASE_KEY.includes("YOUR_");
+const cloudClient=LIVE_ENABLED
+  ? window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY)
+  : null;
+
+const KEY="looply-final-v1";
+const ADMIN={schoolId:"admin1",username:"admin",password:"admin@1",name:"Loopy Admin"};
+const SCHOOL_ID="LOOPLY1";
+const defaults={
+ meals:{"Panner Curry and Rice":0,"Chicken Curry and Rice":0,"Burger and Fries":0,"Chicken Noodle Soup":0},
+ foodIcons:{"Panner Curry and Rice":"🍛","Chicken Curry and Rice":"🍗","Burger and Fries":"🍔","Chicken Noodle Soup":"🍜"},
+ students:[{id:"kevin",name:"Kevin",username:"Kevin",meal:null}],
+ listings:[
+  {id:"l1",owner:"Aarav",item:"Atomic Habits",detail:"Available for 3 days",status:"available",price:20,duration:"3 days"},
+  {id:"l2",owner:"Maya",item:"The Alchemist",detail:"Available this week",status:"available",price:15,duration:"1 week"},
+  {id:"l3",owner:"Kabir",item:"Table Tennis Paddle",detail:"Available after 4 PM",status:"available",price:30,duration:"Today"},
+  {id:"l4",owner:"Riya",item:"Badminton Racket",detail:"Available tomorrow",status:"available",price:25,duration:"Tomorrow"}
+ ],
+ requests:[],theme:"dark",logs:[],settings:{spamThreshold:4,spamWindow:30,schoolName:"Loopy Campus"},users:[{id:"kevin",schoolId:"LOOPLY1",username:"Kevin",password:"student@1",name:"Kevin",meal:null}]
+};
+let state=loadState(), page="overview", currentUser=null, loginMode="student", foodSwitches=[], spamLockUntil=0;
+function clone(x){return JSON.parse(JSON.stringify(x))}
+function normalizeState(input){
+  const s=Object.assign(clone(defaults),input||{});
+  s.settings=Object.assign(clone(defaults.settings),s.settings||{});
+  s.users=Array.isArray(s.users)?s.users:[];
+  s.students=Array.isArray(s.students)?s.students:[];
+  s.listings=Array.isArray(s.listings)?s.listings:[];
+  s.requests=Array.isArray(s.requests)?s.requests:[];
+  s.logs=Array.isArray(s.logs)?s.logs:[];
+
+  // Canonical Loopy food menu. The rest of the app state is preserved.
+  s.meals={
+    "Panner Curry and Rice":0,
+    "Chicken Curry and Rice":0,
+    "Burger and Fries":0,
+    "Chicken Noodle Soup":0
+  };
+  s.foodIcons={
+    "Panner Curry and Rice":"🍛",
+    "Chicken Curry and Rice":"🍗",
+    "Burger and Fries":"🍔",
+    "Chicken Noodle Soup":"🍜"
+  };
+
+  // Keep only valid current food selections.
+  s.students.forEach(u=>{
+    if(!Object.prototype.hasOwnProperty.call(s.meals,u.meal))u.meal=null;
+  });
+
+  return s;
+}
+
+function loadState(){
+  try{
+    const raw=localStorage.getItem(KEY);
+    return raw?normalizeState(JSON.parse(raw)):normalizeState(defaults);
+  }catch(e){
+    return normalizeState(defaults);
+  }
+}
+
+function persistLocal(){
+  localStorage.setItem(KEY,JSON.stringify(state));
+  try{localStorage.setItem(KEY+"-tick",Date.now().toString())}catch(e){}
+}
+
+let cloudReady=false;
+let cloudSaveInFlight=false;
+let cloudSaveAgain=false;
+let cloudPollTimer=null;
+let lastCloudUpdatedAt="";
+
+async function saveCloud(){
+  if(!LIVE_ENABLED||!cloudClient||!cloudReady)return;
+  if(cloudSaveInFlight){
+    cloudSaveAgain=true;
+    return;
+  }
+  cloudSaveInFlight=true;
+  try{
+    const stamp=new Date().toISOString();
+    const payload=clone(state);
+
+    const {error}=await cloudClient
+      .from("loopy_state")
+      .upsert(
+        {id:"main",payload,updated_at:stamp},
+        {onConflict:"id"}
+      );
+
+    if(error)throw error;
+
+    lastCloudUpdatedAt=stamp;
+    const label=document.getElementById("liveLabel");
+    if(label)label.textContent="Live · Supabase";
+  }catch(e){
+    console.warn("Loopy cloud save failed:",e?.message||e);
+    const label=document.getElementById("liveLabel");
+    if(label)label.textContent="Live · Connection issue";
+  }finally{
+    cloudSaveInFlight=false;
+    if(cloudSaveAgain){
+      cloudSaveAgain=false;
+      saveCloud();
+    }
+  }
+}
+
+function save(){
+  persistLocal();
+  render();
+  saveCloud();
+}
+
+async function fetchCloudState(){
+  if(!LIVE_ENABLED||!cloudClient)return false;
+  try{
+    const {data,error}=await cloudClient
+      .from("loopy_state")
+      .select("payload,updated_at")
+      .eq("id","main")
+      .maybeSingle();
+
+    if(error)throw error;
+    if(!data?.payload)return false;
+
+    const incoming=data.updated_at||"";
+    if(lastCloudUpdatedAt && incoming && incoming<=lastCloudUpdatedAt)return true;
+
+    state=normalizeState(data.payload);
+    lastCloudUpdatedAt=incoming;
+    persistLocal();
+    render();
+    applyTheme();
+    return true;
+  }catch(e){
+    console.warn("Loopy cloud fetch failed:",e?.message||e);
+    return false;
+  }
+}
+
+async function loadCloud(){
+  if(!LIVE_ENABLED||!cloudClient)return false;
+  try{
+    const {data,error}=await cloudClient
+      .from("loopy_state")
+      .select("payload,updated_at")
+      .eq("id","main")
+      .maybeSingle();
+
+    if(error)throw error;
+
+    if(data?.payload){
+      state=normalizeState(data.payload);
+      lastCloudUpdatedAt=data.updated_at||"";
+      persistLocal();
+      cloudReady=true;
+      return true;
+    }
+
+    state=normalizeState(defaults);
+    const stamp=new Date().toISOString();
+    const {error:insertError}=await cloudClient
+      .from("loopy_state")
+      .upsert(
+        {id:"main",payload:clone(state),updated_at:stamp},
+        {onConflict:"id"}
+      );
+
+    if(insertError)throw insertError;
+
+    lastCloudUpdatedAt=stamp;
+    persistLocal();
+    cloudReady=true;
+    return true;
+  }catch(e){
+    console.warn("Loopy cloud load failed; using local demo:",e?.message||e);
+    cloudReady=false;
+    return false;
+  }
+}
+
+async function refreshFromCloud(){
+  if(!cloudReady)return;
+  const ok=await fetchCloudState();
+  const label=document.getElementById("liveLabel");
+  if(label)label.textContent=ok?"Live · Supabase":"Live · Connection issue";
+}
+
+function startRealtime(){
+  if(!LIVE_ENABLED||!cloudClient)return;
+
+  cloudClient.channel("loopy-live-state")
+    .on(
+      "postgres_changes",
+      {event:"*",schema:"public",table:"loopy_state",filter:"id=eq.main"},
+      ()=>{refreshFromCloud();}
+    )
+    .subscribe(status=>{
+      const label=document.getElementById("liveLabel");
+      if(!label)return;
+      if(status==="SUBSCRIBED")label.textContent="Live · Supabase";
+      else if(status==="CHANNEL_ERROR"||status==="TIMED_OUT")label.textContent="Live · Connection issue";
+    });
+
+  // Safety net in case a Realtime event is missed.
+  if(cloudPollTimer)clearInterval(cloudPollTimer);
+  cloudPollTimer=setInterval(refreshFromCloud,4000);
+}
+
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+function toast(msg){const x=document.createElement("div");x.className="toast";x.textContent=msg;document.getElementById("toasts").appendChild(x);setTimeout(()=>{x.classList.add("out");setTimeout(()=>x.remove(),250)},2300)}
+function log(type,message){state.logs.unshift({id:"g"+Date.now()+Math.random().toString(16).slice(2),time:new Date().toLocaleString(),type,message,user:currentUser?.username||"system"});state.logs=state.logs.slice(0,250);localStorage.setItem(KEY,JSON.stringify(state))}
+function applyTheme(){document.documentElement.classList.toggle("dark",state.theme==="dark");document.querySelectorAll("[data-theme]").forEach(b=>b.classList.toggle("active",b.dataset.theme===state.theme))}
+function setTheme(t){state.theme=t;localStorage.setItem(KEY,JSON.stringify(state));applyTheme();render()}
+function setupNav(){const nav=document.getElementById("sideNav"),mob=document.getElementById("mobilebar");if(currentUser?.role==="admin"){
+ document.body.classList.add("admin-mode");document.getElementById("sideTag").textContent="Admin operations · Control";nav.innerHTML=`<button data-page="overview">▦ &nbsp; Dashboard</button><button data-page="food">◉ &nbsp; Food Control</button><button data-page="resources">□ &nbsp; Resources</button><button data-page="requests">✓ &nbsp; Requests</button><button data-page="logs">≡ &nbsp; Activity Logs</button>`;mob.innerHTML=`<button data-page="overview">Dashboard</button><button data-page="food">Food</button><button data-page="requests">Requests</button><button data-page="logs">Logs</button>`;
+ }else{document.body.classList.remove("admin-mode");document.getElementById("sideTag").textContent="Predict · Share · Save";nav.innerHTML=`<button data-page="overview">⌂ &nbsp; Overview</button><button data-page="food">◉ &nbsp; Food Demand</button><button data-page="resources">□ &nbsp; Resources</button><button data-page="requests">✓ &nbsp; My Requests</button>`;mob.innerHTML=`<button data-page="overview">Home</button><button data-page="food">Food</button><button data-page="resources">Resources</button><button data-page="requests">Requests</button>`;}
+ document.getElementById("signedName").textContent=currentUser?.name||"Kevin";document.getElementById("signedLabel").textContent=currentUser?.role==="admin"?"Admin account":"Signed in as";document.getElementById("logoutBtn").textContent="⇥ Sign out";
+}
+function showLogin(){document.getElementById("loginback").classList.remove("hidden");document.getElementById("appShell").style.display="none";document.body.classList.remove("admin-mode")}
+function enterApp(user){currentUser=user;document.getElementById("loginback").classList.add("hidden");document.getElementById("appShell").style.display="block";setupNav();page="overview";render();log("login",currentUser.username+" signed in");save();}
+function logout(){if(currentUser)log("logout",currentUser.username+" signed out");currentUser=null;showLogin();toast("Signed out")}
+function validateCredentials(school,password,username){if(school!==SCHOOL_ID)return {ok:false,msg:"Incorrect School ID."};if(password!=="student@1")return {ok:false,msg:"Incorrect student password."};if(!username||username.length<1)return {ok:false,msg:"Enter a username."};let u=state.users.find(x=>x.username.toLowerCase()===username.toLowerCase()&&x.schoolId===school);if(!u){u={id:"u"+Date.now()+Math.random().toString(16).slice(2),schoolId:school,username:username,password:password,name:username,meal:null};state.users.push(u);state.students.push({id:u.id,name:u.name,username:u.username,meal:null});localStorage.setItem(KEY,JSON.stringify(state));}else{u.name=username;const st=state.students.find(x=>x.id===u.id);if(st)st.name=username;}return {ok:true,user:{id:u.id,name:username,username:username,role:"student",schoolId:school}}}
+function signUp(){const school=document.getElementById("schoolId").value.trim(),password=document.getElementById("loginPassword").value,username=document.getElementById("loginUsername").value.trim();const terms=document.getElementById("termsCheck");const err=document.getElementById("loginErr");err.textContent="";if(loginMode!=="student"){err.textContent="Admin access uses the separate admin credentials.";return}if(!terms.checked){err.textContent="Please agree to the Loopy Terms & Conditions.";return}if(school!==SCHOOL_ID){err.textContent="Use your school-issued School ID.";return}if(username.length<3||password.length<4){err.textContent="Username must be 3+ characters and password 4+ characters.";return}if(state.users.some(u=>u.username.toLowerCase()===username.toLowerCase())){err.textContent="That username is already registered on this device.";return}const u={id:"u"+Date.now(),schoolId:school,username,password,name:username,meal:null};state.users.push(u);state.students.push({id:u.id,name:u.name,username:u.username,meal:null});log("signup",username+" created a student account");save();toast("Account created. You can now log in.")}
+function login(e){e.preventDefault();const school=document.getElementById("schoolId").value.trim(),password=document.getElementById("loginPassword").value,username=document.getElementById("loginUsername").value.trim(),err=document.getElementById("loginErr");err.textContent="";if(loginMode==="admin"){if(school===ADMIN.schoolId&&username===ADMIN.username&&password===ADMIN.password)enterApp({id:"admin",name:ADMIN.name,username:ADMIN.username,role:"admin",schoolId:school});else err.textContent="Admin credentials are incorrect.";return}const v=validateCredentials(school,password,username);if(!v.ok){err.textContent=v.msg;return}enterApp(v.user)}
+function openTerms(){openModal(`<h2>Loopy Terms & Conditions</h2><p>These demo terms explain how Loopy is intended to be used.</p><div class="notice"><b>1. Campus use.</b> Loopy is intended for authorized students and school administrators.</div><div class="notice"><b>2. Accurate listings.</b> Students must only list resources they genuinely have available.</div><div class="notice"><b>3. Borrowing.</b> Approved items must be collected, returned and recorded through the Loopy Executive Counter.</div><div class="notice"><b>4. Food selections.</b> Students should make one genuine meal selection and should not intentionally manipulate demand data.</div><div class="notice"><b>5. Privacy.</b> This prototype stores demo account and activity data locally in the browser and is not connected to a production school database.</div><div class="notice"><b>6. Admin authority.</b> Administrators may moderate listings, requests, food options and activity logs.</div><div class="notice"><b>7. Demo disclaimer.</b> This prototype is for demonstration and competition use and should not be treated as a production service.</div><div class="modalfoot"><button class="btn primary" onclick="closeModal()">Close</button></div>`)}
+function openModal(html){document.getElementById("modal").innerHTML=html;document.getElementById("modalback").classList.add("show")}
+function closeModal(){document.getElementById("modalback").classList.remove("show")}
+function mealCounts(){const counts={};Object.keys(state.meals).forEach(m=>counts[m]=0);state.students.forEach(u=>{if(u.meal&&counts[u.meal]!=null)counts[u.meal]++});return counts}
+function stats(){const counts=mealCounts(),total=Object.values(counts).reduce((a,b)=>a+b,0),pending=state.requests.filter(r=>r.status==="pending").length;return {total,pending,resources:state.listings.filter(l=>l.status!=="removed").length,approved:state.requests.filter(r=>r.status==="approved").length}}
+function foodBars(){const counts=mealCounts(),max=Math.max(1,...Object.values(counts));return Object.entries(counts).map(([m,n])=>`<div class="barrow"><span>${esc(m)}</span><div class="barbg"><div class="bar" style="width:${n/max*100}%"></div></div><b>${n}</b></div>`).join("")}
+function selectedMeal(){const u=state.students.find(x=>x.id===currentUser?.id)||state.students.find(x=>x.username===currentUser?.username);return u?.meal||null}
+function render(){setupNav();applyTheme();const s=stats();const pages=currentUser?.role==="admin"?{overview:renderAdminDashboard,food:renderAdminFood,resources:renderAdminResources,requests:renderAdminRequests,logs:renderLogs}:{overview:renderOverview,food:renderFood,resources:renderResources,requests:renderRequests};const v=document.getElementById("appview");v.innerHTML=(pages[page]||pages.overview)();document.querySelectorAll("[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page===page));const name=currentUser?.name||"Kevin";document.getElementById("title").textContent=currentUser?.role==="admin"?(page==="overview"?"Admin dashboard.":({food:"Food control",resources:"Resource moderation",requests:"Borrowing requests",logs:"Activity logs"}[page]||"Admin control")):(page==="overview"?`Good morning, ${esc(name)}.`:({food:"Food demand",resources:"Campus resources",requests:"My requests"}[page]||"Loopy"));document.getElementById("subtitle").textContent=currentUser?.role==="admin"?"Control the campus loop, review activity and change operating rules.":(page==="overview"?"See what your campus needs — and what it already has.":"Everything updates instantly, so you never need to refresh.");document.getElementById("liveLabel").textContent=currentUser?.role==="admin"?"Live · Admin console":"Live · Student";document.getElementById("liveDetail").textContent=currentUser?.role==="admin"?`${s.pending} requests waiting · ${s.total} food selections · ${s.resources} resources`:`${s.pending} request${s.pending===1?"":"s"} waiting · ${s.total} food selections counted`}
+function renderOverview(){const s=stats();return `<div class="page"><div class="notice">💡 <b>Loopy loop:</b> predict demand, find existing resources, share what is unused, then buy only what is missing.</div><section class="card hero"><div class="eyebrow">The Loopy idea</div><h2>Stop buying what your campus already owns.</h2><p>Loopy connects demand forecasting, campus inventory and student sharing into one simple decision engine.</p><div class="heroactions"><button class="btn primary" data-page="resources">Find a resource →</button><button class="btn soft" data-page="food">Choose today's meal</button><button class="btn outline" data-action="tour">How it works</button></div></section><div class="grid stats" style="margin-top:15px"><div class="card"><div class="statlabel">Food selections</div><div class="stat">${s.total}</div><div class="trend">Live today</div></div><div class="card"><div class="statlabel">Resources listed</div><div class="stat">${s.resources}</div><div class="trend">Available to borrow</div></div><div class="card"><div class="statlabel">Pending requests</div><div class="stat">${s.pending}</div><div class="trend">${s.pending?"Needs attention":"All clear"}</div></div><div class="card"><div class="statlabel">Approved</div><div class="stat">${s.approved}</div><div class="trend">Requests fulfilled</div></div></div><div class="grid two"><div class="card"><div class="sectionhead"><h2>Campus demand</h2><span>Live selections</span></div>${foodBars()}</div><div class="card"><div class="sectionhead"><h2>Utilization snapshot</h2><span>Demo metric</span></div><div class="kpi"><div><div class="bigpercent">78%</div><div class="mini">campus resources potentially reusable</div></div><div class="ring"></div></div><p class="mini" style="line-height:1.5;margin-top:18px">Loopy's goal is simple: satisfy the need from existing resources before creating a new purchase.</p></div></div></div>`}
+function renderFood(){
+  const locked=Date.now()<spamLockUntil;
+  return `<div class="page"><div class="card">
+    <div class="sectionhead"><h2>Choose your meal</h2><span>Open selection</span></div>
+    <div class="notice">${locked
+      ?"⚠️ <b>Food selection temporarily locked.</b> Please wait for the anti-spam cooldown."
+      :"Your choice is counted immediately. Select another meal to switch your choice."}</div>
+    <div class="foodgrid">${Object.entries(state.meals).map(([m,n])=>{
+      const e=state.foodIcons?.[m]||"🍽️";
+      return `<button class="food ${selectedMeal()===m?"selected":""}" data-food="${esc(m)}" ${locked?"disabled":""}>
+        <span class="emoji">${e}</span><strong>${esc(m)}</strong><small>${selectedMeal()===m?"Selected ✓":"Tap to select"}</small>
+      </button>`;
+    }).join("")}</div></div>
+    <div class="card" style="margin-top:15px"><div class="sectionhead"><h2>Kitchen demand</h2><span>Updates as students choose</span></div>${foodBars()}</div>
+  </div>`;
+}
+function renderResources(){const reqMap=Object.fromEntries(state.requests.filter(r=>r.studentId===currentUser?.id&&r.status!=="cancelled").map(r=>[r.listingId,r]));return `<div class="page"><div class="card"><div class="sectionhead"><h2>Borrow instead of buying</h2><button class="btn primary" data-action="new">+ List something</button></div><div class="notice" style="margin:10px 0 15px">🏫 <b>Loopy Executive Counter:</b> All borrowing and item handovers must take place through the Loopy Executive Counter on campus. Students do not exchange items directly.</div><p class="mini" style="margin-top:-6px;margin-bottom:15px">Find useful books and sports equipment already available on campus.</p><div class="list">${state.listings.filter(l=>l.status!=="removed").length?state.listings.filter(l=>l.status!=="removed").map(l=>{const r=reqMap[l.id];const isOwner=l.ownerId===currentUser?.id;return `<div class="item"><div class="itemmain"><div class="itemtitle">${esc(l.item)}</div><div class="meta">${esc(l.owner)} · ${esc(l.detail)} · Borrow for ${esc(l.duration||"Flexible")}</div></div><div class="actions"><span class="pricebadge">₹${Number(l.price||0)}</span>${isOwner?`<span class="badge blue">Your listing</span>`:r?`<span class="badge ${r.status==="approved"?"green":r.status==="declined"?"red":"orange"}">${r.status==="approved"?"Approved":r.status==="declined"?"Declined":"Waiting for approval"}</span>${r.status==="pending"?`<button class="btn soft" data-action="cancel" data-id="${r.id}">Cancel</button>`:""}`:`<button class="btn primary" data-action="request" data-id="${l.id}">Request · ₹${Number(l.price||0)}</button>`}${isOwner?`<button class="btn danger" data-action="remove" data-id="${l.id}">Remove</button>`:""}</div></div>`}).join(""):`<div class="empty"><strong>No resources yet</strong>Be the first person to list something.</div>`}</div></div></div>`}
+function renderRequests(){const mine=state.requests.filter(r=>r.studentId===currentUser?.id);return `<div class="page"><div class="card"><div class="sectionhead"><h2>Your requests</h2><span>Live status</span></div><div class="notice" style="margin-top:12px">🏫 Approved borrowing is completed through the <b>Loopy Executive Counter</b> on campus.</div>${mine.length?`<div class="list">${mine.map(r=>{const l=state.listings.find(x=>x.id===r.listingId);return `<div class="item"><div class="itemmain"><div class="itemtitle">${esc(l?.item||"Resource")}</div><div class="meta">₹${Number(l?.price||0)} · ${esc(l?.duration||"Flexible")} · Request ${r.status}</div></div><div class="actions"><span class="badge ${r.status==="approved"?"green":r.status==="declined"?"red":"orange"}">${r.status==="approved"?"Approved ✓":r.status==="declined"?"Declined":"Waiting for approval"}</span>${r.status==="pending"?`<button class="btn soft" data-action="cancel" data-id="${r.id}">Cancel request</button>`:""}</div></div>`}).join("")}</div>`:`<div class="empty"><strong>No requests yet</strong>Go to Resources and request something to see it here instantly.</div>`}</div></div>`}
+function renderAdminDashboard(){const s=stats();return `<div class="page"><div class="notice">🛡️ <b>Admin console:</b> You have control over requests, food options, listings and activity logs. Changes are shared through Supabase in live mode.</div><div class="grid stats"><div class="card"><div class="statlabel">Pending</div><div class="stat">${s.pending}</div><div class="trend">Requests to review</div></div><div class="card"><div class="statlabel">Food demand</div><div class="stat">${s.total}</div><div class="trend">Live selections</div></div><div class="card"><div class="statlabel">Listings</div><div class="stat">${s.resources}</div><div class="trend">Campus resources</div></div><div class="card"><div class="statlabel">Logs</div><div class="stat">${state.logs.length}</div><div class="trend">Recent activity</div></div></div><div class="grid two"><div class="card"><div class="sectionhead"><h2>Food demand</h2><span>Live control</span></div>${foodBars()}</div><div class="card"><div class="sectionhead"><h2>Operating rules</h2><span>Editable</span></div>${adminSettings()}<div class="modalfoot"><button class="btn outline" data-action="reset">Reset demo data</button></div></div></div><div class="card" style="margin-top:15px"><div class="sectionhead"><h2>Recent activity</h2><button class="btn soft" data-page="logs">View all logs</button></div>${renderLogRows(6)}</div></div>`}
+function adminSettings(){
+  return `<div class="settinggrid" style="grid-template-columns:1fr">
+    <label class="mini">Food switches allowed in 30 sec
+      <input class="input" id="spamInput" type="number" min="2" max="10" value="${Number(state.settings.spamThreshold)||4}">
+    </label>
+  </div>
+  <div class="modalfoot"><button class="btn primary" data-action="save-settings">Save changes</button></div>
+  <div class="notice" style="margin-top:12px">Students can change their meal at any time. Only rapid switching between different foods triggers the anti-spam cooldown.</div>`;
+}
+function renderAdminFood(){return `<div class="page"><div class="card"><div class="sectionhead"><h2>Food control</h2><button class="btn primary" data-action="foodmanager">Edit menu</button></div><div class="notice">Admins can add/remove food options and control the anti-spam limit.</div>${foodBars()}</div><div class="card" style="margin-top:15px">${adminSettings()}</div></div>`}
+function renderAdminResources(){return `<div class="page"><div class="card"><div class="sectionhead"><h2>Listing moderation</h2><span>Admin control</span></div><div class="list">${state.listings.filter(l=>l.status!=="removed").map(l=>`<div class="item"><div class="itemmain"><div class="itemtitle">${esc(l.item)}</div><div class="meta">${esc(l.owner)} · ${esc(l.detail)} · ₹${Number(l.price||0)} · ${esc(l.duration||"Flexible")} · ${esc(l.status)}</div></div><button class="btn danger" data-action="remove" data-id="${l.id}">Remove</button></div>`).join("")}</div></div></div>`}
+function renderAdminRequests(){return `<div class="page"><div class="card"><div class="sectionhead"><h2>Borrowing requests</h2><span>Moderation</span></div><div class="list">${state.requests.length?state.requests.map(r=>{const l=state.listings.find(x=>x.id===r.listingId);return `<div class="item"><div class="itemmain"><div class="itemtitle">${esc(l?.item||"Removed resource")}</div><div class="meta">${esc(r.student)} → ${esc(l?.owner||"unknown")} · ₹${Number(l?.price||0)} · ${r.status}</div></div><div class="actions">${r.status==="pending"?`<button class="btn success" data-action="approve" data-id="${r.id}">Approve</button><button class="btn danger" data-action="decline" data-id="${r.id}">Decline</button>`:`<span class="badge ${r.status==="approved"?"green":"red"}">${r.status}</span>`}</div></div>`}).join(""):`<div class="empty"><strong>Nothing to review</strong>New requests will appear here instantly.</div>`}</div></div></div>`}
+function renderLogRows(limit=50){return state.logs.slice(0,limit).map(l=>`<div class="logrow"><b>${esc(l.type.toUpperCase())}</b> · ${esc(l.message)}<div class="logtime">${esc(l.time)} · ${esc(l.user)}</div></div>`).join("")||`<div class="empty">No activity logged yet.</div>`}
+function renderLogs(){return `<div class="page"><div class="card"><div class="sectionhead"><h2>Activity logs</h2><button class="btn danger" data-action="clear-logs">Clear logs</button></div><div class="notice">Every sign-in, sign-up, food change, spam warning, request, approval, listing change and admin setting change is recorded here.</div>${renderLogRows()}</div></div>`}
+function openTour(){openModal(`<h2>How Loopy works</h2><p>One simple loop: predict the need, find what already exists, share it, then buy only what is missing.</p><div class="steps"><div class="step"><b class="stepnum">01</b><strong>Predict</strong><span>See expected food and resource demand.</span></div><div class="step"><b class="stepnum">02</b><strong>Find</strong><span>Discover resources already on campus.</span></div><div class="step"><b class="stepnum">03</b><strong>Share</strong><span>Borrow unused items instead of buying again.</span></div><div class="step"><b class="stepnum">04</b><strong>Save</strong><span>Purchase only the remaining gap.</span></div></div><div class="modalfoot"><button class="btn primary" onclick="closeModal()">Got it</button></div>`)}
+function openNewListing(){openModal(`<h2>Add a resource</h2><p>Set your borrowing price and how long the item can be borrowed.</p><div class="notice" style="margin:12px 0 0">🏫 Items are handed over and returned only through the <b>Loopy Executive Counter</b> on campus.</div><form class="form" id="listingForm"><input class="input" name="item" placeholder="What are you sharing? e.g. Book or sports equipment" required><input class="input" name="detail" placeholder="Availability note e.g. After 4 PM" required><input class="input" name="price" type="number" min="0" step="1" placeholder="Borrowing price in ₹ e.g. 25" required><select class="input durationselect" name="duration" required><option value="" disabled selected>Borrowing period</option><option value="Today">Today</option><option value="Tomorrow">Tomorrow</option><option value="1 week">Next week</option><option value="1 month">Next month</option></select><div class="modalfoot"><button type="button" class="btn soft" onclick="closeModal()">Cancel</button><button class="btn primary">Publish listing</button></div></form>`);document.getElementById("listingForm").onsubmit=e=>{e.preventDefault();const f=new FormData(e.target);const item=f.get("item").trim();state.listings.unshift({id:"l"+Date.now(),owner:currentUser.name,ownerId:currentUser.id,item,detail:f.get("detail"),price:Math.max(0,Number(f.get("price"))||0),duration:f.get("duration"),status:"available"});log("listing",currentUser.username+" listed "+item);closeModal();toast("Your borrowing listing is live ✓");save()}}
+function chooseFood(meal){
+  if(currentUser?.role!=="student")return;
+  if(Date.now()<spamLockUntil){
+    toast("Food selection is temporarily locked.");
+    return;
+  }
+
+  const now=Date.now();
+  foodSwitches=foodSwitches.filter(x=>now-x.time<=Number(state.settings.spamWindow||30));
+  const prev=selectedMeal();
+  const u=state.students.find(x=>x.id===currentUser.id);
+  if(!u)return;
+
+  // Selecting the same meal toggles it off.
+  if(prev===meal){
+    u.meal=null;
+    log("food",currentUser.username+" removed "+meal);
+    save();
+    toast("Food choice cleared");
+    return;
+  }
+
+  // Always apply the new meal immediately.
+  u.meal=meal;
+  foodSwitches.push({meal,time:now});
+  log("food",currentUser.username+" selected "+meal);
+  save();
+  toast("Food choice saved: "+meal);
+
+  // Anti-spam only activates after the new selection has been applied.
+  const switches=foodSwitches.length;
+  if(switches>Number(state.settings.spamThreshold||4)){
+    spamLockUntil=now+30000;
+    log("spam-warning",currentUser.username+" triggered food anti-spam control");
+    toast("⚠️ Rapid switching detected. Selection locked briefly.");
+    render();
+  }
+}
+function actions(a,id){
+  if(a==="request"){
+    const l=state.listings.find(x=>x.id===id&&x.status!=="removed");
+    if(!l)return;
+    if(currentUser?.role!=="student"){toast("Only student accounts can request resources");return}
+    if(l.ownerId===currentUser.id){toast("You cannot request your own listing");return}
+    if(state.requests.some(r=>r.listingId===id&&r.studentId===currentUser.id&&r.status==="pending")){
+      toast("You already requested this item");return
+    }
+    state.requests.push({
+      id:"r"+Date.now()+Math.random().toString(16).slice(2),
+      listingId:id,studentId:currentUser.id,student:currentUser.name,status:"pending"
+    });
+    log("request",currentUser.username+" requested "+l.item);
+    toast("Your request was sent ✓");
+    save();
+    return
+  }
+
+  if(a==="cancel"){
+    let r=state.requests.find(x=>x.id===id&&x.studentId===currentUser?.id&&x.status==="pending");
+    if(!r)r=state.requests.find(x=>x.listingId===id&&x.studentId===currentUser?.id&&x.status==="pending");
+    if(!r){toast("Pending request not found");return}
+    r.status="cancelled";
+    log("request",currentUser.username+" cancelled a request");
+    toast("Request cancelled ✓");
+    save();
+    return
+  }
+
+  if(a==="approve"||a==="decline"){
+    if(currentUser?.role!=="admin")return;
+    const r=state.requests.find(x=>x.id===id&&x.status==="pending");
+    if(!r)return;
+    r.status=a==="approve"?"approved":"declined";
+    log("admin",currentUser.username+" "+a+"d request "+id);
+    toast(a==="approve"?"Request approved ✓":"Request declined");
+    save();
+    return
+  }
+
+  if(a==="remove"){
+    const l=state.listings.find(x=>x.id===id);
+    if(!l)return;
+    const allowed=currentUser?.role==="admin"||l.ownerId===currentUser?.id;
+    if(!allowed){toast("You can only remove your own listings");return}
+    state.requests.forEach(r=>{if(r.listingId===id&&r.status==="pending")r.status="cancelled"});
+    state.listings=state.listings.filter(x=>x.id!==id);
+    log(currentUser.role==="admin"?"admin":"listing",currentUser.username+" removed listing "+l.item);
+    toast("Listing removed ✓");
+    save();
+    return
+  }
+
+  if(a==="new"){openNewListing();return}
+  if(a==="tour"){openTour();return}
+  if(a==="foodmanager"){openFoodManager();return}
+
+  if(a==="save-settings"){
+    if(currentUser?.role!=="admin")return;
+    const th=Math.max(2,Math.min(10,Number(document.getElementById("spamInput")?.value)||4));
+    state.settings.spamThreshold=th;
+    log("settings",currentUser.username+" changed food anti-spam control");
+    save();
+    toast("Admin settings saved ✓");
+    return
+  }
+
+  if(a==="clear-logs"){
+    if(currentUser?.role!=="admin")return;
+    if(confirm("Clear all activity logs?")){
+      state.logs=[];
+      save();
+      toast("Logs cleared")
+    }
+    return
+  }
+
+  if(a==="reset-demo"){resetDemo();return}
+
+  if(a==="reset"){
+    if(currentUser?.role!=="admin")return;
+    if(confirm("Reset Loopy demo data?"))resetDemo()
+  }
+}
+function resetDemo(){
+  if(!currentUser)return;
+  if(!confirm("Reset Loopy demo data? This will clear food selections, requests, listings, logs and admin changes."))return;
+
+  const active=currentUser;
+  state=clone(defaults);
+  foodSwitches=[];
+  spamLockUntil=0;
+
+  // Keep the current demo session alive, while restoring all other demo data.
+  if(active.role==="student"){
+    const u={id:active.id||("u"+Date.now()),schoolId:SCHOOL_ID,username:active.username,name:active.name, password:"student@1",meal:null};
+    state.users=[u];
+    state.students=[{id:u.id,name:u.name,username:u.username,meal:null}];
+    currentUser={...active,id:u.id};
+    log("admin","Demo reset by "+active.username);
+  }else{
+    log("admin","Demo reset by "+active.username);
+  }
+
+  save();
+  toast("Demo reset ✓");
+}
+function openFoodManager(){openModal(`<h2>Edit food options</h2><p>These options appear immediately on the Student food screen.</p><div class="list" style="margin-top:14px">${Object.entries(state.meals).map(([m,n])=>`<div class="item"><div class="itemmain"><div class="itemtitle">${state.foodIcons?.[m]||"🍽️"} ${esc(m)}</div><div class="meta">${mealCounts()[m]||0} selection${(mealCounts()[m]||0)===1?"":"s"} today</div></div><button class="btn danger" data-food-remove="${esc(m)}">Remove</button></div>`).join("")}</div><form class="form" id="foodForm"><input class="input" name="name" placeholder="New food name e.g. Pasta" required><input class="input" name="icon" placeholder="Emoji e.g. 🍝" maxlength="4"><div class="modalfoot"><button type="button" class="btn soft" onclick="closeModal()">Done</button><button class="btn primary">+ Add option</button></div></form>`);document.querySelectorAll("[data-food-remove]").forEach(b=>b.onclick=()=>{const m=b.dataset.foodRemove;if(Object.keys(state.meals).length<=1){toast("Keep at least one food option");return}delete state.meals[m];delete state.foodIcons[m];state.students.forEach(u=>{if(u.meal===m)u.meal=null});log("admin",currentUser.username+" removed food option "+m);save();openFoodManager()});document.getElementById("foodForm").onsubmit=e=>{e.preventDefault();const f=new FormData(e.target),name=f.get("name").trim(),icon=f.get("icon").trim()||"🍽️";if(!name){toast("Enter a food option");return}if(state.meals[name]!=null){toast("That food option already exists");return}state.meals[name]=0;state.foodIcons[name]=icon;log("admin",currentUser.username+" added food option "+name);save();closeModal();toast(name+" added to the menu ✓")}}
+document.addEventListener("click",e=>{const nav=e.target.closest("[data-page]");if(nav){page=nav.dataset.page;render();window.scrollTo({top:0,behavior:"smooth"});return}const th=e.target.closest("[data-theme]");if(th){setTheme(th.dataset.theme);return}const food=e.target.closest("[data-food]");if(food&&!food.disabled){chooseFood(food.dataset.food);return}const act=e.target.closest("[data-action]");if(act){actions(act.dataset.action,act.dataset.id);return}if(e.target.id==="modalback")closeModal()});
+document.getElementById("loginForm").addEventListener("submit",login);
+document.getElementById("resetDemoBtn").addEventListener("click",()=>resetDemo());document.getElementById("signupBtn").addEventListener("click",signUp);document.getElementById("termsLink").addEventListener("click",e=>{e.preventDefault();openTerms()});document.getElementById("logoutBtn").addEventListener("click",logout);document.getElementById("studentTab").addEventListener("click",()=>{loginMode="student";document.getElementById("studentTab").classList.add("active");document.getElementById("adminTab").classList.remove("active");document.getElementById("loginErr").textContent=""});document.getElementById("adminTab").addEventListener("click",()=>{loginMode="admin";document.getElementById("adminTab").classList.add("active");document.getElementById("studentTab").classList.remove("active");document.getElementById("loginErr").textContent=""});
+window.addEventListener("storage",e=>{if(e.key===KEY&&currentUser){state=loadState();render();}});
+window.addEventListener("beforeunload",()=>{if(currentUser)log("session",currentUser.username+" closed Loopy")});
+applyTheme();showLogin();
+(async function initLoopyLive(){
+  const label=document.getElementById("liveLabel");
+  const ready=await loadCloud();
+  if(label){
+    label.textContent=LIVE_ENABLED
+      ? (ready?"Live · Supabase":"Live · Offline fallback")
+      : "Live · Local demo";
+  }
+  if(ready)startRealtime();
+  render();
+})();
+
+if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(err=>console.warn("Loopy PWA:",err)));}</script>
+</body></html>

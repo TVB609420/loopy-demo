@@ -1,0 +1,19 @@
+{
+  "name": "Loopy",
+  "short_name": "Loopy",
+  "description": "Predict. Share. Save. Campus resource intelligence.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#070709",
+  "theme_color": "#8b5cf6",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
